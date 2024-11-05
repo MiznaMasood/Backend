@@ -1,6 +1,7 @@
-const DBURI ="mongodb+srv://Mizna:2007@cluster0.l3rnr.mongodb.net/my_app_database"
+import 'dotenv/config'
 const app = express()
-const PORT = 5174
+const DBURI = process.env.MONGODB_URI
+const PORT = process.env.PORT
 import express from "express"; 
 import mongoose from "mongoose"; 
 import bcrypt from "bcrypt";

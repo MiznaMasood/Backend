@@ -10,7 +10,7 @@ const Signup = () => {
 
   const HandleSubmit = async() => {
    try{
-    const response = await axios.post("http://localhost:5174/register", {name,email,password})
+    const response = await axios.post("http://localhost:3000/register", {name,email,password})
     if(response.data.status){
       alert(response.data.message)
       navigate("/login")

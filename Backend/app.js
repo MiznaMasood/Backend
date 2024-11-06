@@ -5,7 +5,10 @@ const PORT = process.env.PORT
 import express from "express"; 
 import mongoose from "mongoose"; 
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";  
 import cors from "cors"; 
+import userModel from './Models/userSchema.js';
+import userVerifyMiddle from './middleware/userVerify.js';
 // import postModel from "./Models/postSchema.js";
 
 // Middleware
@@ -16,7 +19,7 @@ app.use(express.json())
 app.use(cors())
 
 //  mongodb configuration 
-mongoose.connect(DBURI),
+mongoose.connect(DBURI)
 mongoose.connection.on("connected", ()=> console.log("MonoDB Connected"))
 
 mongoose.connection.on("error",(err) => console.log("MongoDB Error", err))
@@ -90,25 +93,33 @@ app.post('/login', async(req,res)=>{
         });
         return;
       }
+   
+var token = jwt.sign({email: user.email, name: user.name,} , process.env.SECRET_KEY );
+
        // Login successful
        res.json({
         message: "Login successful",
-        status : true
+        status : true,
+        token: token
       });
     })
+
+    app.get("/api/getusers", userVerifyMiddle, async(req,res)=>{
+      try{
+      const users = await userModel.find({});
+      res.json({
+        message: "all users get",
+        status: true,
+        users: users
+      })
+    }catch(error){
+      console.log("Error", error)
+      res.json({
+        message: "Error fetching users",
+        status: false
+      })
+    }
+    })
      
-
-         
-
-         
-         
-
-
-
-
-
-
-
-
 
 app.listen(PORT, () => console.log('Server running'));

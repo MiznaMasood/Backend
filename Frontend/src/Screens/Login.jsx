@@ -7,22 +7,28 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  
-  const HandleSubmit = async() => {
-  try{
-    const response = await axios.post("http://localhost:5174/login")
-    if(response.data.status){
-      alert("Login successful!🙂")
-      navigate("/dashboard")
-    }else{
-      alert(response.data.message)
-    }
-  }catch (error){
-    alert("An error occurred. Please try again.");
+  const HandleSubmit = async (e) => {
+    e.preventDefault(); 
+    console.log("Email:", email);
+    console.log("Password:", password); 
+    try {
+     console.log("Attempting to log in...");
+const response = await axios.post("http://localhost:3000/login", { email, password });
+console.log("Response received:", response);
 
+      if (response.data.status) {
+          alert("Login successful!🙂");
+          navigate("/dashboard");
+      } else {
+          alert(response.data.message);
+      }
+  } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
   }
-   
+  
   };
+  
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '50px' }}>
       <h1>Login</h1>
